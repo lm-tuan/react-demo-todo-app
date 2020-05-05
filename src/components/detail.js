@@ -42,15 +42,15 @@ const DialogContent = withStyles((theme) => ({
 
 
 export default function Detail(props) {
-  const [open, setOpen] = React.useState(true);
+  const [openDetail, setOpenDetail] = React.useState(true);
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenDetail(false);
   };
 
   return (
     <div>
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={openDetail}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Detail item
         </DialogTitle>

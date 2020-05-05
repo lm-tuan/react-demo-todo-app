@@ -17,6 +17,9 @@ const useStyles = makeStyles({
     minWidth: 650,
   },
   cusButton: {},
+  hand: {
+    cursor: 'pointer',
+  }
 });
 
 export default function SimpleTable(props) {
@@ -41,6 +44,7 @@ export default function SimpleTable(props) {
             <TableCell>Index</TableCell>
               <TableCell>Name</TableCell>
               <TableCell align="right">NumberPhone</TableCell>
+              <TableCell align="right">Description</TableCell>
               <TableCell align="right">Option</TableCell>
             </TableRow>
           </TableHead>
@@ -48,7 +52,7 @@ export default function SimpleTable(props) {
             {rows.length === 0
               ? ""
               : rows?.map((row, index) => (
-                  <TableRow onClick={ () => onDetail(row.id) } key={row?.id}>
+                  <TableRow  key={row?.id}>
                     <TableCell component="th" scope="row">
                       {index + 1}
                     </TableCell>
@@ -56,6 +60,7 @@ export default function SimpleTable(props) {
                       {row?.fname}
                     </TableCell>
                     <TableCell align="right">{row?.fnumber}</TableCell>
+                    <TableCell align="right" onClick={ () => onDetail(row.id) } className  = {classes.hand} >...</TableCell>
                     <TableCell align="right">
                       <ButtonGroup
                         disableElevation

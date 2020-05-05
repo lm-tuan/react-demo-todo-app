@@ -69,7 +69,6 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: 400,
     left: 600,
-    zIndex: 99,
   },
 }));
 
@@ -79,6 +78,9 @@ export default function SimpleTabs(props) {
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [user, setUser] = React.useState({id: '', fname:'', fnumber: ''});
+  const [editing, setEditing] = React.useState(false);
+
 
   // Change componentDidmount
   useEffect(() => {
@@ -99,9 +101,36 @@ export default function SimpleTabs(props) {
     setOpen(false);
   };
   const handleClickOpen = () => {
+    if(!editing){
+      setEditing(true);
+      setUser({id:'', fname:'', fnumber :''});
+      setOpen(true);
+    }
     setOpen(true);
+    setEditing(false);
   };
   const onSubmit = (value) => {
+        //update
+    if(value.id){
+      let lstStore = localStorage.getItem("lst");
+      lstStore = JSON.parse(lstStore);
+      const index = _.findIndex(lstStore.data, (item) => {
+        return item.id === value.id;
+      });
+      let data = [
+        ...lstStore.data.slice(0, index),
+        {
+          id : value.id,
+          fname: value.fname,
+          fnumber: value.fnumber
+        },
+        ...lstStore.data.slice(index + 1),
+      ];
+      setData(data);
+      localStorage.setItem("lst", JSON.stringify({ data }));
+      handleClose();
+    }else{
+    // insert
     value.id = uuidv4();
     let data = [];
     let lstStore = localStorage.getItem("lst");
@@ -117,6 +146,7 @@ export default function SimpleTabs(props) {
     setData(data);
     localStorage.setItem("lst", JSON.stringify({ data }));
     handleClose();
+    }
   };
 
   const onDelete = (id) => {
@@ -140,8 +170,19 @@ export default function SimpleTabs(props) {
     }, 2000);
   };
 
-  const onEdit = (id) => {};
+  const onEdit = (id) => {
+    handleClickOpen();
+    let lstStore = localStorage.getItem("lst");
+      if (!lstStore) {
+        return;
+      }
+      lstStore = JSON.parse(lstStore);
+      const index = _.findIndex(lstStore.data, (item) => {
+        return item.id === id;
+      });
+      setUser(lstStore.data[index]);
 
+  };
   return (
     <div className={classes.root}>
       {loading ? <CircularProgress className={classes.loading} /> : ""}
@@ -173,8 +214,8 @@ export default function SimpleTabs(props) {
         >
           <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
           <Formik
-            initialValues={{ fname: "", fnumber: "" }}
-            onSubmit={onSubmit}
+            initialValues={{ id:user.id, fname:user.fname, fnumber :user.fnumber }}
+            onSubmit={ onSubmit }
             validationSchema={Yup.object().shape({
               fname: Yup.string()
                 .min(5, "Too Short!")
@@ -248,6 +289,7 @@ export default function SimpleTabs(props) {
           </Formik> */}
           </Formik>
         </Dialog>
+        {/* { editing ? <FormEdit user = {user}/> : ''} */}
         <SimpleTable
           lst={data ? data : []}
           onEdit={onEdit}
