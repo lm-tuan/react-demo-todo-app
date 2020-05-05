@@ -19,6 +19,7 @@ import * as Yup from "yup";
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 import { REG_NUMBER_PHONE } from './../consts/'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,12 +57,20 @@ function a11yProps(index) {
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
+    position: 'relative',
+    opacity:1,
   },
   cusButton: {},
   tabPanel: {
     textAlign: "left"
-  }
+  },
+  loading:{
+    position: 'absolute',
+    top: 400,
+    left:600,
+    zIndex:99,
+  },
 }));
 
 export default function SimpleTabs(props) {
@@ -69,6 +78,7 @@ export default function SimpleTabs(props) {
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
 
     // Change componentDidmount
@@ -112,19 +122,22 @@ export default function SimpleTabs(props) {
   }
  
   const onDelete = (id) => {
-    console.log('id', id)
-    let lstStore = localStorage.getItem('lst');
-    if(!lstStore){
-     return;
-    }
-    lstStore = JSON.parse(lstStore);
-    const index = _.findIndex(lstStore.data, (item) => {
-        return item.id === id;
-    });
-    console.log('index', index);
-    let data = [...lstStore.data.slice(0, index), ...lstStore.data.slice(index + 1) ];
-    setData(data);
-    localStorage.setItem('lst', JSON.stringify({data}));
+    setLoading(true);
+    setTimeout(()=> {
+      let lstStore = localStorage.getItem('lst');
+      if(!lstStore){
+      return;
+      }
+      lstStore = JSON.parse(lstStore);
+      const index = _.findIndex(lstStore.data, (item) => {
+          return item.id === id;
+      });
+      let data = [...lstStore.data.slice(0, index), ...lstStore.data.slice(index + 1) ];
+      setData(data);
+      localStorage.setItem('lst', JSON.stringify({data}));
+      setLoading(false);
+    }, 2000)
+    
   }
 
   const onEdit= (id) => {
@@ -134,6 +147,7 @@ export default function SimpleTabs(props) {
 
   return (
     <div className={classes.root}>
+      {loading ? <CircularProgress className={classes.loading} /> : ''}
       <AppBar position="static">
         <Tabs
           value={value}
