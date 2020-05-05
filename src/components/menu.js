@@ -16,10 +16,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { v4 as uuidv4 } from 'uuid';
-import _ from 'lodash';
-import { REG_NUMBER_PHONE } from './../consts/'
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { v4 as uuidv4 } from "uuid";
+import _ from "lodash";
+import { REG_NUMBER_PHONE } from "./../consts/";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,32 +44,32 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };
 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    position: 'relative',
-    opacity:1,
+    position: "relative",
+    opacity: 1,
   },
   cusButton: {},
   tabPanel: {
-    textAlign: "left"
+    textAlign: "left",
   },
-  loading:{
-    position: 'absolute',
+  loading: {
+    position: "absolute",
     top: 400,
-    left:600,
-    zIndex:99,
+    left: 600,
+    zIndex: 99,
   },
 }));
 
@@ -80,74 +80,71 @@ export default function SimpleTabs(props) {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
-
-    // Change componentDidmount
+  // Change componentDidmount
   useEffect(() => {
-    let lst = localStorage.getItem('lst');
-    if(!lst){
-      setData([])
+    let lst = localStorage.getItem("lst");
+    if (!lst) {
+      setData([]);
       return;
     }
     lst = JSON.parse(lst);
     setData(lst.data);
   }, []);
-  
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const handleClose = e => {
+  const handleClose = (e) => {
     setOpen(false);
   };
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const onSubmit = value => {
+  const onSubmit = (value) => {
     value.id = uuidv4();
     let data = [];
-    let lstStore = localStorage.getItem('lst'); 
-    if(!lstStore){
-      data.push(value)
+    let lstStore = localStorage.getItem("lst");
+    if (!lstStore) {
+      data.push(value);
       setData(data);
-      localStorage.setItem('lst', JSON.stringify({data}));
+      localStorage.setItem("lst", JSON.stringify({ data }));
       handleClose();
     }
     lstStore = JSON.parse(lstStore);
     data = lstStore.data;
-    data.push(value)
+    data.push(value);
     setData(data);
-    localStorage.setItem('lst', JSON.stringify({data}));
+    localStorage.setItem("lst", JSON.stringify({ data }));
     handleClose();
-  
-  }
- 
+  };
+
   const onDelete = (id) => {
     setLoading(true);
-    setTimeout(()=> {
-      let lstStore = localStorage.getItem('lst');
-      if(!lstStore){
-      return;
+    setTimeout(() => {
+      let lstStore = localStorage.getItem("lst");
+      if (!lstStore) {
+        return;
       }
       lstStore = JSON.parse(lstStore);
       const index = _.findIndex(lstStore.data, (item) => {
-          return item.id === id;
+        return item.id === id;
       });
-      let data = [...lstStore.data.slice(0, index), ...lstStore.data.slice(index + 1) ];
+      let data = [
+        ...lstStore.data.slice(0, index),
+        ...lstStore.data.slice(index + 1),
+      ];
       setData(data);
-      localStorage.setItem('lst', JSON.stringify({data}));
+      localStorage.setItem("lst", JSON.stringify({ data }));
       setLoading(false);
-    }, 2000)
-    
-  }
+    }, 2000);
+  };
 
-  const onEdit= (id) => {
-    
-  }
- 
+  const onEdit = (id) => {};
 
   return (
     <div className={classes.root}>
-      {loading ? <CircularProgress className={classes.loading} /> : ''}
+      {loading ? <CircularProgress className={classes.loading} /> : ""}
       <AppBar position="static">
         <Tabs
           value={value}
@@ -176,85 +173,86 @@ export default function SimpleTabs(props) {
         >
           <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
           <Formik
-            initialValues={{ fname: "", fnumber: ""}}
+            initialValues={{ fname: "", fnumber: "" }}
             onSubmit={onSubmit}
             validationSchema={Yup.object().shape({
               fname: Yup.string()
-                .min(5, 'Too Short!')
-                .max(50, 'Too Long!')
+                .min(5, "Too Short!")
+                .max(50, "Too Long!")
                 .required("Required Name ")
                 .trim(),
               fnumber: Yup.string()
                 .required("Required Number")
-                .matches(REG_NUMBER_PHONE, 'Phone number is not valid'),
+                .matches(REG_NUMBER_PHONE, "Phone number is not valid"),
             })}
           >
-            {
-              (props) => {
-                const {
-                  values,
-                  touched,
-                  errors,
-                  isSubmitting,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                } = props;
-                return (
-                  <form onSubmit={handleSubmit}>
-                    <DialogContent>
-                      <TextField
-                        error={errors.fname && touched.fname}
-                        autoFocus
-                        margin="dense"
-                        id="fname"
-                        label="Name"
-                        name = "fname"
-                        fullWidth
-                        value={values.fname}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        errorText = {errors.fname}
-                        helperText={(errors.fname && touched.fname) && errors.fname}
-                      />
-                      <TextField
-                        margin="dense"
-                        id="fnumber"
-                        label="Number Phone"
-                        name = "fnumber"
-                        fullWidth
-                        value={values.fnumber}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        helperText={(errors.fnumber && touched.fnumber) && errors.fnumber}
-                        error={errors.fnumber && touched.fnumber}
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose} color="primary">
-                        Cancel
-                     </Button>
-                      <Button 
-                      type="submit" 
-                      // onClick={handleClose} 
+            {(props) => {
+              const {
+                values,
+                touched,
+                errors,
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+              } = props;
+              return (
+                <form onSubmit={handleSubmit}>
+                  <DialogContent>
+                    <TextField
+                      error={errors.fname && touched.fname}
+                      autoFocus
+                      margin="dense"
+                      id="fname"
+                      label="Name"
+                      name="fname"
+                      fullWidth
+                      value={values.fname}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      errorText={errors.fname}
+                      helperText={errors.fname && touched.fname && errors.fname}
+                    />
+                    <TextField
+                      margin="dense"
+                      id="fnumber"
+                      label="Number Phone"
+                      name="fnumber"
+                      fullWidth
+                      value={values.fnumber}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      helperText={
+                        errors.fnumber && touched.fnumber && errors.fnumber
+                      }
+                      error={errors.fnumber && touched.fnumber}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      // onClick={handleClose}
                       color="primary"
                       disabled={isSubmitting}
-
-                      >
-                        Subscribe
-                      </Button>
-                    </DialogActions>
-                  </form>
-                )
-              } }
+                    >
+                      Subscribe
+                    </Button>
+                  </DialogActions>
+                </form>
+              );
+            }}
             {/* </form>
           </Formik> */}
           </Formik>
         </Dialog>
-        <SimpleTable lst={data ? data :[]} 
-                     onEdit = {onEdit} 
-                     onDelete = { onDelete} 
-         />
+        <SimpleTable
+          lst={data ? data : []}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         {/* <SimpleTable lst={lst} /> */}
