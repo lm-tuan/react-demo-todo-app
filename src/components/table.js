@@ -25,18 +25,6 @@ const useStyles = makeStyles({
 
 export default function SimpleTable(props) {
 
-  const [openModal, setOpenModal] = React.useState(false);
-
-  const handleCloseModal = e => {
-    setOpenModal(false);
-  };
-  // const handleClickOpenModal = () => {
-  //   setOpenModal(true);
-  // };
-  const onProcessDeleteAndOpenMoal = (id) => {
-    setOpenModal(true);
-    props.onDelete(id);
-  }
   const classes = useStyles();
   const rows = props.lst ? props.lst : [];
   return (
@@ -71,31 +59,9 @@ export default function SimpleTable(props) {
                         color="primary"
                       >
                         <Button onClick = { ()=> props.onEdit(row.id)}>Edit</Button>
-                        <Button color="secondary" onClick = {() =>onProcessDeleteAndOpenMoal(row.id)}>Delete</Button>
+                        <Button color="secondary" onClick = {() =>props.onDelete(row.id)}>Delete</Button>
                       </ButtonGroup>
                     </ButtonGroup>
-                    <Dialog
-                      open={openModal}
-                      onClose={handleCloseModal}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          Let Google help apps determine location. This means sending anonymous location data to
-                          Google, even when no apps are running.
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleCloseModal} color="primary">
-                          YES
-                        </Button>
-                        <Button onClick={handleCloseModal} color="primary" autoFocus>
-                          NO
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))

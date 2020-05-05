@@ -17,8 +17,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from 'uuid';
-import DialogContentText from '@material-ui/core/DialogContentText';
-
+import _ from 'lodash';
 import { REG_NUMBER_PHONE } from './../consts/'
 
 function TabPanel(props) {
@@ -112,8 +111,20 @@ export default function SimpleTabs(props) {
   
   }
  
-  const onDelete = (id, isOpenModal) => {
+  const onDelete = (id) => {
     console.log('id', id)
+    let lstStore = localStorage.getItem('lst');
+    if(!lstStore){
+     return;
+    }
+    lstStore = JSON.parse(lstStore);
+    const index = _.findIndex(lstStore.data, (item) => {
+        return item.id === id;
+    });
+    console.log('index', index);
+    let data = [...lstStore.data.slice(0, index), ...lstStore.data.slice(index + 1) ];
+    setData(data);
+    localStorage.setItem('lst', JSON.stringify({data}));
   }
 
   const onEdit= (id) => {
