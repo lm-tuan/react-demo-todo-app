@@ -18,7 +18,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
-import { REG_NUMBER_PHONE } from "./../consts/";
+import { REG_NUMBER_PHONE, UPDATE, SUBSCIBE } from "./../consts/";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 function TabPanel(props) {
@@ -212,7 +212,7 @@ export default function SimpleTabs(props) {
           onClose={handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title"> { user.id ? UPDATE : SUBSCIBE }</DialogTitle>
           <Formik
             initialValues={{ id:user.id, fname:user.fname, fnumber :user.fnumber }}
             onSubmit={ onSubmit }
@@ -279,7 +279,7 @@ export default function SimpleTabs(props) {
                       color="primary"
                       disabled={isSubmitting}
                     >
-                      Subscribe
+                      { user.id ? UPDATE : SUBSCIBE}
                     </Button>
                   </DialogActions>
                 </form>
