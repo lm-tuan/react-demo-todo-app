@@ -17,7 +17,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from 'uuid';
-
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { REG_NUMBER_PHONE } from './../consts/'
 
@@ -71,6 +71,7 @@ export default function SimpleTabs(props) {
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState([]);
 
+
     // Change componentDidmount
   useEffect(() => {
     let lst = localStorage.getItem('lst');
@@ -110,6 +111,16 @@ export default function SimpleTabs(props) {
     handleClose();
   
   }
+ 
+  const onDelete = (id, isOpenModal) => {
+    console.log('id', id)
+  }
+
+  const onEdit= (id) => {
+    
+  }
+ 
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -215,7 +226,10 @@ export default function SimpleTabs(props) {
           </Formik> */}
           </Formik>
         </Dialog>
-        <SimpleTable lst={data ? data :[]} />
+        <SimpleTable lst={data ? data :[]} 
+                     onEdit = {onEdit} 
+                     onDelete = { onDelete} 
+         />
       </TabPanel>
       <TabPanel value={value} index={1}>
         {/* <SimpleTable lst={lst} /> */}
