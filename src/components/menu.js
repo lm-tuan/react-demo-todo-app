@@ -21,7 +21,7 @@ import _ from "lodash";
 import { REG_NUMBER_PHONE, UPDATE, SUBSCIBE } from "./../consts/";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useDispatch, useSelector } from "react-redux";
-import {FetchAPi } from './../actions/'
+import {FetchAPi, InsertUser, DeleteUser } from './../actions/'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -129,44 +129,13 @@ export default function SimpleTabs(props) {
       localStorage.setItem("lst", JSON.stringify({ data }));
       handleClose();
     }else{
-    // insert
-    value.id = uuidv4();
-    let data = [];
-    let lstStore = localStorage.getItem("lst");
-    if (!lstStore) {
-      data.push(value);
-      setData(data);
-      localStorage.setItem("lst", JSON.stringify({ data }));
-      handleClose();
-    }
-    lstStore = JSON.parse(lstStore);
-    data = lstStore.data;
-    data.push(value);
-    setData(data);
-    localStorage.setItem("lst", JSON.stringify({ data }));
+    dispatch(InsertUser.request(value));
     handleClose();
     }
   };
 
   const onDelete = (id) => {
-    setLoading(true);
-    setTimeout(() => {
-      let lstStore = localStorage.getItem("lst");
-      if (!lstStore) {
-        return;
-      }
-      lstStore = JSON.parse(lstStore);
-      const index = _.findIndex(lstStore.data, (item) => {
-        return item.id === id;
-      });
-      let data = [
-        ...lstStore.data.slice(0, index),
-        ...lstStore.data.slice(index + 1),
-      ];
-      setData(data);
-      localStorage.setItem("lst", JSON.stringify({ data }));
-      setLoading(false);
-    }, 2000);
+    dispatch(DeleteUser.request(id));
   };
 
   const onEdit = (id) => {

@@ -52,7 +52,7 @@ export default function SimpleTable(props) {
             {rows.length === 0
               ? ""
               : rows?.map((row, index) => (
-                  <TableRow  key={row?.id}>
+                  <TableRow  key={row.index}>
                     <TableCell component="th" scope="row">
                       {index + 1}
                     </TableCell>
