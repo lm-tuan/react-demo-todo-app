@@ -1,5 +1,6 @@
 import * as types from "./../consts/";
 
+// class fetch Api
 export class FetchAPi {
    static request(){
         return {

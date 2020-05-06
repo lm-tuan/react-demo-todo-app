@@ -20,7 +20,8 @@ import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
 import { REG_NUMBER_PHONE, UPDATE, SUBSCIBE } from "./../consts/";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import { useDispatch, useSelector } from "react-redux";
+import {FetchAPi } from './../actions/'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -67,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   loading: {
     position: "absolute",
-    top: 400,
+    top: 300,
     left: 600,
   },
 }));
@@ -82,15 +83,13 @@ export default function SimpleTabs(props) {
   const [editing, setEditing] = React.useState(false);
 
 
+  const datas = useSelector(state => state.users);
+  const dispatch = useDispatch();
+
   // Change componentDidmount
-  useEffect(() => {
-    let lst = localStorage.getItem("lst");
-    if (!lst) {
-      setData([]);
-      return;
-    }
-    lst = JSON.parse(lst);
-    setData(lst.data);
+  useEffect(  () => {
+    // test
+    dispatch(FetchAPi.request());
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -183,9 +182,10 @@ export default function SimpleTabs(props) {
       setUser(lstStore.data[index]);
 
   };
+  console.log('datas', datas);
   return (
     <div className={classes.root}>
-      {loading ? <CircularProgress className={classes.loading} /> : ""}
+      { datas.loading ? <CircularProgress className={classes.loading} /> : ""}
       <AppBar position="static">
         <Tabs
           value={value}
@@ -291,7 +291,7 @@ export default function SimpleTabs(props) {
         </Dialog>
         {/* { editing ? <FormEdit user = {user}/> : ''} */}
         <SimpleTable
-          lst={data ? data : []}
+          lst={datas.users ? datas.users : []}
           onEdit={onEdit}
           onDelete={onDelete}
         />

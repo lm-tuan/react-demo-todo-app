@@ -5,7 +5,6 @@ import { FetchAPi } from '../actions/'
 function* fetchTodoList() {
     try {
       const response = yield fetchData();
-      console.log(response);
       const data = response.data ? response.data:[] ;
       yield put(FetchAPi.success(data));
     } catch (err) {

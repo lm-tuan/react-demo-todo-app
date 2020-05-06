@@ -10,6 +10,6 @@ export const fetchData = () => {
                 reject(error);
             }
             
-        }, 1000)
+        }, 2000)
     })
 }
