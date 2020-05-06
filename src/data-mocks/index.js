@@ -11,7 +11,7 @@ export const fetchData = () => {
                 reject(error);
             }
             
-        }, 2000)
+        }, 1000)
     })
 }
 

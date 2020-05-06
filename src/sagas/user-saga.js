@@ -1,4 +1,4 @@
-import { put, takeLatest } from "redux-saga/effects";
+import { put, takeLatest, delay } from "redux-saga/effects";
 import { fetchData } from "./../data-mocks";
 import * as types from "./../consts";
 import { FetchAPi, InsertUser, DeleteUser } from "../actions/";
@@ -22,6 +22,7 @@ function* insertUser(data) {
     fname: data.user.fname,
     fnumber: data.user.fnumber,
   };
+  yield delay(1000);
   yield put(InsertUser.success(newUser));
 
   // request server send data user methods POST
@@ -45,6 +46,7 @@ function* deleteUser(idUser) {
   if (!idUser || !idUser.id) {
     yield put(DeleteUser.fail(new Error("User Error !")));
   }
+  yield delay(1000);
   yield put(DeleteUser.success(idUser.id));
   // request server for update data
   try {

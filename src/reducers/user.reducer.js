@@ -36,7 +36,7 @@ const users = (state = initialState, action) => {
     
      // delete data
      case types.DELETE_TASK_REQUEST:
-        return { ...state };
+        return { ...state, loading: true };
   
       case types.DELETE_TASK_SUCCESS:
         const index = _.findIndex(state.users, (item) => {
@@ -48,7 +48,8 @@ const users = (state = initialState, action) => {
           users: [
             ...state.users.slice(0, index),
             ...state.users.slice(index + 1),
-          ]
+          ],
+          loading: false 
         };
   
       case types.DELETE_TASK_FAILURE:

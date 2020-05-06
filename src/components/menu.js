@@ -155,6 +155,7 @@ export default function SimpleTabs(props) {
   return (
     <div className={classes.root}>
       { datas.loading ? <CircularProgress className={classes.loading} /> : ""}
+      {/* <CircularProgress className={classes.loading}/> */}
       <AppBar position="static">
         <Tabs
           value={value}
