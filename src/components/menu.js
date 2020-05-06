@@ -67,9 +67,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
   },
   loading: {
-    position: "absolute",
-    top: 300,
-    left: 600,
+    position: "fixed",
+    top: '50%',
+    left: '50%',
+    zIndex:99,
+    
   },
 }));
 
@@ -111,26 +113,26 @@ export default function SimpleTabs(props) {
   const onSubmit = (value) => {
         //update
     if(value.id){
-      let lstStore = localStorage.getItem("lst");
-      lstStore = JSON.parse(lstStore);
-      const index = _.findIndex(lstStore.data, (item) => {
-        return item.id === value.id;
-      });
-      let data = [
-        ...lstStore.data.slice(0, index),
-        {
-          id : value.id,
-          fname: value.fname,
-          fnumber: value.fnumber
-        },
-        ...lstStore.data.slice(index + 1),
-      ];
-      setData(data);
-      localStorage.setItem("lst", JSON.stringify({ data }));
-      handleClose();
+      // let lstStore = localStorage.getItem("lst");
+      // lstStore = JSON.parse(lstStore);
+      // const index = _.findIndex(lstStore.data, (item) => {
+      //   return item.id === value.id;
+      // });
+      // let data = [
+      //   ...lstStore.data.slice(0, index),
+      //   {
+      //     id : value.id,
+      //     fname: value.fname,
+      //     fnumber: value.fnumber
+      //   },
+      //   ...lstStore.data.slice(index + 1),
+      // ];
+      // setData(data);
+      // localStorage.setItem("lst", JSON.stringify({ data }));
+      // handleClose();
     }else{
-    dispatch(InsertUser.request(value));
-    handleClose();
+      dispatch(InsertUser.request(value));
+      handleClose();
     }
   };
 
@@ -151,11 +153,9 @@ export default function SimpleTabs(props) {
       setUser(lstStore.data[index]);
 
   };
-  console.log('datas', datas);
   return (
     <div className={classes.root}>
       { datas.loading ? <CircularProgress className={classes.loading} /> : ""}
-      {/* <CircularProgress className={classes.loading}/> */}
       <AppBar position="static">
         <Tabs
           value={value}

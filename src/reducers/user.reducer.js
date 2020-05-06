@@ -20,18 +20,18 @@ const users = (state = initialState, action) => {
 
     // inser data
     case types.ADD_TASK_REQUEST:
-      return { ...state };
+      return { ...state, loading: true };
 
     case types.ADD_TASK_SUCCESS:
       // insert on UI
       return {
         ...state,
         users: [...state.users, action.user],
-        openForm: false
+        loading:false
       };
 
     case types.ADD_TASK_FAILURE:
-      return { ...state };
+      return { ...state, loading:false };
 
     
      // delete data
