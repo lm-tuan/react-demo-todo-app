@@ -15,7 +15,7 @@ export class FetchAPi {
   }
   static fail(error) {
     return {
-      type: types.API_CALL_SUCCESS,
+      type: types.API_CALL_FAILURE,
       error,
     };
   }
@@ -58,6 +58,49 @@ export class DeleteUser {
   static fail(error) {
     return {
       type: types.DELETE_TASK_FAILURE,
+      error,
+    };
+  }
+}
+
+// edit
+export class UserEditing{
+  static request(id) {
+    return {
+      type: types.TAKS_EDITING_REQUEST,
+      id,
+    };
+  }
+  static success(id) {
+    return {
+      type: types.TAKS_EDITING_SUCCESS,
+      id,
+    };
+  }
+  static fail(error) {
+    return {
+      type: types.TAKS_EDITING_FAILUR,
+      error,
+    };
+  }
+}
+
+export class UserUpdate{
+  static request(data) {
+    return {
+      type: types.UPDATE_TASK_REQUEST,
+      data,
+    };
+  }
+  static success(data) {
+    return {
+      type: types.UPDATE_TASK_SUCCESS,
+      data,
+    };
+  }
+  static fail(error) {
+    return {
+      type: types.UPDATE_TASK_FAILURE,
       error,
     };
   }

@@ -6,6 +6,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+import { useSelector } from 'react-redux';
 
 const styles = (theme) => ({
   root: {
@@ -42,12 +43,15 @@ const DialogContent = withStyles((theme) => ({
 
 
 export default function Detail(props) {
-  const [openDetail, setOpenDetail] = React.useState(true);
-
+  const [openDetail, setOpenDetail] = React.useState(false);
+  const datas = useSelector(state => state.users);
+  
   const handleClose = () => {
+    console.log('click');
     setOpenDetail(false);
   };
-
+  
+  console.log('datas -deltal', datas);
   return (
     <div>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={openDetail}>
@@ -56,10 +60,10 @@ export default function Detail(props) {
         </DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Name : {props.item.fname}
+            Name :
           </Typography>
           <Typography gutterBottom>
-             Number Phone : {props.item.fnumber}
+             Number Phone :
           </Typography>
           <Typography gutterBottom>
             Description: Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel

@@ -16,12 +16,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { v4 as uuidv4 } from "uuid";
-import _ from "lodash";
 import { REG_NUMBER_PHONE, UPDATE, SUBSCIBE } from "./../consts/";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useDispatch, useSelector } from "react-redux";
-import {FetchAPi, InsertUser, DeleteUser } from './../actions/'
+import {FetchAPi, InsertUser, DeleteUser, UserEditing, UserUpdate } from './../actions/'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -79,21 +77,20 @@ export default function SimpleTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
-  const [data, setData] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
   const [user, setUser] = React.useState({id: '', fname:'', fnumber: ''});
-  const [editing, setEditing] = React.useState(false);
 
 
   const datas = useSelector(state => state.users);
   const dispatch = useDispatch();
 
   // Change componentDidmount
-  useEffect(  () => {
-    // test
+  useEffect( () => {
     dispatch(FetchAPi.request());
-  }, []);
-
+    if(datas.editing && datas?.editing.id){
+      setUser({id:datas.editing.id, fname:datas.editing.fname, fnumber :datas.editing.fnumber});
+    }
+  }, [datas.editing ]);
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -102,34 +99,12 @@ export default function SimpleTabs(props) {
     setOpen(false);
   };
   const handleClickOpen = () => {
-    if(!editing){
-      setEditing(true);
-      setUser({id:'', fname:'', fnumber :''});
-      setOpen(true);
-    }
     setOpen(true);
-    setEditing(false);
   };
   const onSubmit = (value) => {
-        //update
     if(value.id){
-      // let lstStore = localStorage.getItem("lst");
-      // lstStore = JSON.parse(lstStore);
-      // const index = _.findIndex(lstStore.data, (item) => {
-      //   return item.id === value.id;
-      // });
-      // let data = [
-      //   ...lstStore.data.slice(0, index),
-      //   {
-      //     id : value.id,
-      //     fname: value.fname,
-      //     fnumber: value.fnumber
-      //   },
-      //   ...lstStore.data.slice(index + 1),
-      // ];
-      // setData(data);
-      // localStorage.setItem("lst", JSON.stringify({ data }));
-      // handleClose();
+      dispatch(UserUpdate.request(value));
+      handleClose();
     }else{
       dispatch(InsertUser.request(value));
       handleClose();
@@ -140,18 +115,14 @@ export default function SimpleTabs(props) {
     dispatch(DeleteUser.request(id));
   };
 
+  const onDetail= (id) => {
+    dispatch(UserEditing.request(id));
+  };
+
+
   const onEdit = (id) => {
     handleClickOpen();
-    let lstStore = localStorage.getItem("lst");
-      if (!lstStore) {
-        return;
-      }
-      lstStore = JSON.parse(lstStore);
-      const index = _.findIndex(lstStore.data, (item) => {
-        return item.id === id;
-      });
-      setUser(lstStore.data[index]);
-
+    dispatch(UserEditing.request(id));
   };
   return (
     <div className={classes.root}>
@@ -264,13 +235,12 @@ export default function SimpleTabs(props) {
           lst={datas.users ? datas.users : []}
           onEdit={onEdit}
           onDelete={onDelete}
+          onDetail = {onDetail}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {/* <SimpleTable lst={lst} /> */}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {/* <SimpleTable /> */}
       </TabPanel>
     </div>
   );

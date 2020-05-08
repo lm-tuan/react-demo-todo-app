@@ -1,9 +1,15 @@
 import { put, takeLatest, delay } from "redux-saga/effects";
 import { fetchData } from "./../data-mocks";
 import * as types from "./../consts";
-import { FetchAPi, InsertUser, DeleteUser } from "../actions/";
+import {
+  FetchAPi,
+  InsertUser,
+  DeleteUser,
+  UserEditing,
+  UserUpdate,
+} from "../actions/";
 import { v4 as uuidv4 } from "uuid";
-import _ from 'lodash'
+import _ from "lodash";
 function* fetchTodoList() {
   try {
     const response = yield fetchData();
@@ -42,6 +48,39 @@ function* insertUser(data) {
   }
 }
 
+function* userEditing(data) {
+  // Check validate
+  if (!data || !data.id) {
+    yield put(UserEditing.fail(new Error("User Error !")));
+  }
+  // Request service
+  yield put(UserEditing.success(data.id));
+}
+
+function* userUpdate(newData) {
+ 
+  yield put(UserUpdate.success(newData.data));
+  try {
+    let lstStore = localStorage.getItem("lst");
+    lstStore = JSON.parse(lstStore);
+    const index = _.findIndex(lstStore.data, (item) => {
+      return item.id === newData.data.id;
+    });
+    let data = [
+      ...lstStore.data.slice(0, index),
+      {
+        id: newData.data.id,
+        fname: newData.data.fname,
+        fnumber: newData.data.fnumber,
+      },
+      ...lstStore.data.slice(index + 1),
+    ];
+    localStorage.setItem("lst", JSON.stringify({ data }));
+  } catch (error) {
+    yield put(UserUpdate.fail(error));
+  }
+}
+
 function* deleteUser(idUser) {
   if (!idUser || !idUser.id) {
     yield put(DeleteUser.fail(new Error("User Error !")));
@@ -51,18 +90,18 @@ function* deleteUser(idUser) {
   // request server for update data
   try {
     let lstStore = localStorage.getItem("lst");
-    if(!lstStore){
-        yield put(DeleteUser.fail(new Error("User Error !")));
+    if (!lstStore) {
+      yield put(DeleteUser.fail(new Error("User Error !")));
     }
     lstStore = JSON.parse(lstStore);
-      const index = _.findIndex(lstStore.data, (item) => {
-        return item.id === idUser.id;
-      });
-      let data = [
-        ...lstStore.data.slice(0, index),
-        ...lstStore.data.slice(index + 1),
-      ];
-      localStorage.setItem("lst", JSON.stringify({ data }));
+    const index = _.findIndex(lstStore.data, (item) => {
+      return item.id === idUser.id;
+    });
+    let data = [
+      ...lstStore.data.slice(0, index),
+      ...lstStore.data.slice(index + 1),
+    ];
+    localStorage.setItem("lst", JSON.stringify({ data }));
   } catch (error) {
     yield put(DeleteUser.fail(error));
   }
@@ -79,4 +118,12 @@ export function* watchInsertUser() {
 
 export function* watchDeleteUser() {
   yield takeLatest(types.DELETE_TASK_REQUEST, deleteUser);
+}
+
+export function* watchUserEditing() {
+  yield takeLatest(types.TAKS_EDITING_REQUEST, userEditing);
+}
+
+export function* watchUserUpdate() {
+  yield takeLatest(types.UPDATE_TASK_REQUEST, userUpdate);
 }

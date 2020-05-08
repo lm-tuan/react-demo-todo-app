@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Card from "@material-ui/core/Card";
 import _ from 'lodash';
-import Detail from './detail';
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -23,16 +22,7 @@ const useStyles = makeStyles({
 });
 
 export default function SimpleTable(props) {
-  const [openModal, setOpenModal] = React.useState(false);
-  const [item, setItem] = React.useState({id: '', fname:'', fnumber: ''});
   const classes = useStyles();
-  const onDetail = (id) => {
-    setOpenModal(!openModal);
-    const index = _.findIndex(props.lst, (item) => {
-      return item.id === id;
-    });
-    setItem(props.lst[index]);
-  }
 
   const rows = props.lst ? props.lst : [];
   return (
@@ -60,20 +50,25 @@ export default function SimpleTable(props) {
                       {row?.fname}
                     </TableCell>
                     <TableCell align="right">{row?.fnumber}</TableCell>
-                    <TableCell align="right" onClick={ () => onDetail(row.id) } className  = {classes.hand} >...</TableCell>
+                    <TableCell align="right" className  = {classes.hand} >...</TableCell>
                     <TableCell align="right">
                       <ButtonGroup
                         disableElevation
                         variant="contained"
                         color="primary"
+                        size="small"
                       >
                         <ButtonGroup
                           disableElevation
-                          variant="contained"
+                          variant="outlined"
                           color="primary"
                         >
+                          <Button color="inherit" onClick={() => props.onDetail(row.id)}>
+                            Detail
+                          </Button>
+
                           <Button onClick={() => props.onEdit(row.id)}>
-                            Edit
+                            Edit  
                           </Button>
                           <Button
                             color="secondary"
@@ -84,9 +79,9 @@ export default function SimpleTable(props) {
                         </ButtonGroup>
                       </ButtonGroup>
                     </TableCell>
-                    {openModal ? <Detail item = {item} /> : '' }
                   </TableRow>
                 ))}
+                {/* < Detail /> */}
           </TableBody>
         </Table>
       </TableContainer>
