@@ -87,7 +87,7 @@ const users = (state = initialState, action) => {
 
       // task editing
       case types.TAKS_EDITING_REQUEST:
-      return { ...state, loading: false };
+      return { ...state };
 
     case types.TAKS_EDITING_SUCCESS:
       const idex = _.findIndex(state.users, (item) => {
@@ -97,11 +97,10 @@ const users = (state = initialState, action) => {
       return {
         ...state,
         editing: state.users[idex],
-        loading: false
       };
 
     case types.TAKS_EDITING_FAILUR:
-      return { ...state, loading: false };
+      return { ...state};
 
     default:
       return { ...state };

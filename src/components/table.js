@@ -11,6 +11,9 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Card from "@material-ui/core/Card";
 import _ from 'lodash';
+import Detail from './detail';
+import { useDispatch, useSelector } from "react-redux";
+import { UserEditing } from "../actions";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -23,7 +26,17 @@ const useStyles = makeStyles({
 
 export default function SimpleTable(props) {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
+  const dispatch = useDispatch();
+  const clickDetail = (id, status) => {
+    if(!status) {
+      setOpen(status);
+      return;
+    }
+    dispatch(UserEditing.request(id))
+    setOpen(status);
+  }
   const rows = props.lst ? props.lst : [];
   return (
     <Card>
@@ -63,7 +76,7 @@ export default function SimpleTable(props) {
                           variant="outlined"
                           color="primary"
                         >
-                          <Button color="inherit" onClick={() => props.onDetail(row.id)}>
+                          <Button color="inherit" onClick={ () => clickDetail(row.id, true)}>
                             Detail
                           </Button>
 
@@ -81,7 +94,7 @@ export default function SimpleTable(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                {/* < Detail /> */}
+                < Detail clickDetail = {clickDetail} status = {open} />
           </TableBody>
         </Table>
       </TableContainer>

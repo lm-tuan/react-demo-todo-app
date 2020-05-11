@@ -96,13 +96,13 @@ export default function SimpleTabs(props) {
   };
 
   const handleClose = (e) => {
+    setUser({id:'', fname:'', fnumber : ''});
     setOpen(false);
   };
   const handleClickOpen = () => {
     setOpen(true);
   };
   const onSubmit = (value) => {
-    console.log('value', value);
     if(value.id){
       dispatch(UserUpdate.request(value));
       setUser({id:'', fname:'', fnumber : ''});

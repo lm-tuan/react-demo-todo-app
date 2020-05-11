@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -47,11 +47,15 @@ export default function Detail(props) {
   const datas = useSelector(state => state.users);
   
   const handleClose = () => {
-    console.log('click');
     setOpenDetail(false);
+    props.clickDetail(null, false);
   };
+  useEffect(() => {
+    if(props.status) {
+      setOpenDetail(props.status);
+    }
+  }, [props.status])
   
-  console.log('datas -deltal', datas);
   return (
     <div>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={openDetail}>
@@ -60,10 +64,10 @@ export default function Detail(props) {
         </DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom>
-            Name :
+            Name :  {datas.editing.fname}
           </Typography>
           <Typography gutterBottom>
-             Number Phone :
+             Number Phone :  {datas.editing.fname}
           </Typography>
           <Typography gutterBottom>
             Description: Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
