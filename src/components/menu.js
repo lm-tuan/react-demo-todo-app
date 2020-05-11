@@ -102,8 +102,10 @@ export default function SimpleTabs(props) {
     setOpen(true);
   };
   const onSubmit = (value) => {
+    console.log('value', value);
     if(value.id){
       dispatch(UserUpdate.request(value));
+      setUser({id:'', fname:'', fnumber : ''});
       handleClose();
     }else{
       dispatch(InsertUser.request(value));

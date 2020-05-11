@@ -19,12 +19,12 @@ export class AxiosService {
   handleError = (error) => {
     return Promise.reject(error);
   };
-  static get = (url) => this.instance.get(url);
+  static get = url => this.instance.get(url);
 
   static post = (url, body) => this.instance.post(url, body);
 
   static put = (url, body) => this.instance.put(url, body);
 
-  static delete = (url) => this.instance.delete(url);
+  static delete = url => this.instance.delete(url);
 }
 
