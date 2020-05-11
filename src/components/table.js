@@ -10,9 +10,8 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Card from "@material-ui/core/Card";
-import _ from 'lodash';
 import Detail from './detail';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { UserEditing } from "../actions";
 const useStyles = makeStyles({
   table: {

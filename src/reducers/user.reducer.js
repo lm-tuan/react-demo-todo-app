@@ -38,7 +38,7 @@ const users = (state = initialState, action) => {
       return { ...state, loading: false };
 
   // update 
-  case types.UPDATE_TASK_FAILURE:
+  case types.UPDATE_TASK_REQUEST:
     return { ...state, loading: true };
 
   case types.UPDATE_TASK_SUCCESS:

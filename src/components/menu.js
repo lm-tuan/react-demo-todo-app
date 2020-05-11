@@ -100,6 +100,7 @@ export default function SimpleTabs(props) {
     setOpen(false);
   };
   const handleClickOpen = () => {
+    setUser({id:'', fname:'', fnumber : ''});
     setOpen(true);
   };
   const onSubmit = (value) => {
@@ -117,11 +118,7 @@ export default function SimpleTabs(props) {
     dispatch(DeleteUser.request(id));
   };
 
-  const onDetail= (id) => {
-    dispatch(UserEditing.request(id));
-  };
-
-
+ 
   const onEdit = (id) => {
     handleClickOpen();
     dispatch(UserEditing.request(id));
@@ -228,16 +225,12 @@ export default function SimpleTabs(props) {
                 </form>
               );
             }}
-            {/* </form>
-          </Formik> */}
           </Formik>
         </Dialog>
-        {/* { editing ? <FormEdit user = {user}/> : ''} */}
         <SimpleTable
           lst={datas.users ? datas.users : []}
           onEdit={onEdit}
           onDelete={onDelete}
-          onDetail = {onDetail}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
